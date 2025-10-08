@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 
 @dataclass
 class Entity:
-    id: UUID = field(default_factory=uuid4, init=False)
+    id: int = field(init=False, default=None)
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, type(self)):
