@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgis/postgis:14-3.3
+    image: postgis/postgis:17-3.5
     container_name: monitoring-application-db-container
     volumes:
       - postgres_data:/var/lib/postgresql/data/
