@@ -5,6 +5,5 @@ from pydantic import BaseModel
 dataclass(frozen=True)
 
 
-class CreateAreaRequest(BaseModel):
-    geometry: dict
-
+class GetAreaView(BaseModel):
+    pass
