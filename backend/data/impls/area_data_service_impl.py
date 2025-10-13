@@ -15,7 +15,7 @@ class AreaDataServiceImpl(AreaDataService):
     def __init__(self, session: Session):
         self.session = session
 
-    def save_area(self, area_dto: AreaDTO, name: str) -> int:
+    def save_area(self, area_dto: AreaDTO, name: str) -> None:
         geom = from_shape(shape(area_dto.geometry))
         aoim = AreaOfInterestModel(
             id=area_dto.area_id,
@@ -25,8 +25,6 @@ class AreaDataServiceImpl(AreaDataService):
         self.session.add(aoim)
         self.session.commit()
         self.session.refresh(aoim)
-
-        return aoim.id
 
     def get_all_areas(self) -> List[AreaDTO]:
         areas = self.session.query(AreaOfInterestModel).all()

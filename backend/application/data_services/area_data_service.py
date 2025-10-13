@@ -7,7 +7,7 @@ from backend.application.dtos.area_dto import AreaDTO
 class AreaDataService(ABC):
 
     @abstractmethod
-    def save_area(self, area_dto: AreaDTO, name: str) -> int:
+    def save_area(self, area_dto: AreaDTO, name: str) -> None:
         pass
 
     @abstractmethod
