@@ -18,7 +18,7 @@ class AreasController:
         self.router.get("")(self.get_all_areas)
 
     async def create_area(self, request: CreateAreaRequest) -> None:
-        area_id = self.area_use_cases.create_area(request.geometry, request.name)
+        self.area_use_cases.create_area(request.geometry, request.name)
 
     async def get_all_areas(self) -> list[GetAreaView]:
         area_dtos = self.area_use_cases.get_all_areas()
