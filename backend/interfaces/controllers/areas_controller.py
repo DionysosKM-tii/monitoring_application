@@ -2,15 +2,14 @@ from dataclasses import dataclass
 
 from fastapi import APIRouter
 
-from backend.application.use_cases.area_use_cases import CreateAreaUseCase, GetAllAreasUseCase
+from backend.application.use_cases.area_use_cases import AreaUseCases
 from backend.interfaces.controllers.requests.area_requests import CreateAreaRequest
 from backend.interfaces.controllers.views.area_views import GetAreaView
 
 
 @dataclass
 class AreasController:
-    create_area_use_case: CreateAreaUseCase
-    get_all_areas_use_case: GetAllAreasUseCase
+    area_use_cases: AreaUseCases
 
     def __post_init__(self):
         self.router = APIRouter(prefix="/areas", tags=["areas"])
@@ -19,12 +18,12 @@ class AreasController:
         self.router.get("")(self.get_all_areas)
 
     async def create_area(self, request: CreateAreaRequest):
-        area_id = self.create_area_use_case.execute(request.geometry, request.name)
+        area_id = self.area_use_cases.create_area(request.geometry, request.name)
 
         return {"area_id": area_id}
 
     async def get_all_areas(self):
-        area_dtos = self.get_all_areas_use_case.execute()
+        area_dtos = self.area_use_cases.get_all_areas()
         area_views = [
             GetAreaView.from_dto(
                 dto

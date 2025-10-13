@@ -5,7 +5,7 @@ from backend.domain.entities.area_of_interest import AreaOfInterest
 
 @dataclass(frozen=True)
 class AreaDTO:
-    id: int
+    area_id: int
     geometry: dict
     name: str = None
 

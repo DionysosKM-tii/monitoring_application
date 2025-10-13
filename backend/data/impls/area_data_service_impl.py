@@ -29,7 +29,6 @@ class AreaDataServiceImpl(AreaDataService):
         return aoim.id
 
     def get_all_areas(self) -> List[AreaDTO]:
-        # Query all areas from database
         areas = self.session.query(AreaOfInterestModel).all()
 
         return [
