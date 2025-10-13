@@ -6,4 +6,5 @@ dataclass(frozen=True)
 
 
 class GetAreaView(BaseModel):
-    pass
+    geometry: dict
+    id: int

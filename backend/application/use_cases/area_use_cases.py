@@ -4,7 +4,7 @@ from typing import List
 from backend.application.data_services.area_data_service import AreaDataService
 from backend.application.dtos.area_dto import AreaDTO
 from backend.domain.entities.area_of_interest import AreaOfInterest
-
+from backend.interfaces.controllers.views.area_views import GetAreaView
 
 @dataclass
 class CreateAreaUseCase:
@@ -24,9 +24,12 @@ class CreateAreaUseCase:
 class GetAllAreasUseCase:
     area_data_service: AreaDataService
 
-    def execute(self) -> List[dict]:
+    def execute(self) -> List[GetAreaView]:
         # Get all areas as DTOs
-        area_dtos = self.area_data_service.get_all_areas()
+        areas = self.area_data_service.get_all_areas()
         
-        # Return just the geometries as requested
-        return [area_dto.geometry for area_dto in area_dtos]
+        # Convert DTOs to GetAreaView objects
+        return [
+            GetAreaView(id=area.id, geometry=area.geometry)
+            for area in areas
+        ]
