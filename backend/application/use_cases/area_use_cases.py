@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List
 
 from backend.application.data_services.area_data_service import AreaDataService
 from backend.application.dtos.area_dto import AreaDTO
@@ -17,3 +18,15 @@ class CreateAreaUseCase:
         area_id = self.area_data_service.save_area(AreaDTO.from_domain(area))
 
         return area_id
+
+
+@dataclass
+class GetAllAreasUseCase:
+    area_data_service: AreaDataService
+
+    def execute(self) -> List[dict]:
+        # Get all areas as DTOs
+        area_dtos = self.area_data_service.get_all_areas()
+        
+        # Return just the geometries as requested
+        return [area_dto.geometry for area_dto in area_dtos]
