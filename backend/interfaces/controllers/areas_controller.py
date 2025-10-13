@@ -14,20 +14,17 @@ class AreasController:
     def __post_init__(self):
         self.router = APIRouter(prefix="/areas", tags=["areas"])
 
-        self.router.post("/create")(self.create_area)
+        self.router.post("/create", status_code=201)(self.create_area)
         self.router.get("")(self.get_all_areas)
 
-    async def create_area(self, request: CreateAreaRequest):
+    async def create_area(self, request: CreateAreaRequest) -> None:
         area_id = self.area_use_cases.create_area(request.geometry, request.name)
 
-        return {"area_id": area_id}
-
-    async def get_all_areas(self):
+    async def get_all_areas(self) -> list[GetAreaView]:
         area_dtos = self.area_use_cases.get_all_areas()
-        area_views = [
+
+        return [
             GetAreaView.from_dto(
                 dto
             ) for dto in area_dtos
         ]
-
-        return {"areas": area_views}
