@@ -12,5 +12,6 @@ class AreaDTO:
     def from_domain(area_of_interest: AreaOfInterest):
         return AreaDTO(
             area_of_interest.id,
-            area_of_interest.geometry
+            area_of_interest.geometry,
+            area_of_interest.name
         )

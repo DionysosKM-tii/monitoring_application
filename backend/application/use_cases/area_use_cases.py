@@ -10,9 +10,10 @@ from backend.interfaces.controllers.views.area_views import GetAreaView
 class CreateAreaUseCase:
     area_data_service: AreaDataService
 
-    def execute(self, geometry: dict) -> int:
+    def execute(self, geometry: dict, name: str) -> int:
         area = AreaOfInterest(
-            geometry
+            geometry,
+            name
         )
 
         area_id = self.area_data_service.save_area(AreaDTO.from_domain(area))

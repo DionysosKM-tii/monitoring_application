@@ -7,4 +7,5 @@ dataclass(frozen=True)
 
 class CreateAreaRequest(BaseModel):
     geometry: dict
+    name: str = ""
 

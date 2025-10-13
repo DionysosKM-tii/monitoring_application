@@ -14,10 +14,10 @@ class AreaDataServiceImpl(AreaDataService):
 
     def save_area(self, area_dto: AreaDTO) -> int:
         geom = from_shape(shape(area_dto.geometry))
-
         aoim = AreaOfInterestModel(
             id=area_dto.id,
-            geometry=geom
+            geometry=geom,
+            name=area_dto.name
         )
         self.session.add(aoim)
         self.session.commit()
@@ -35,9 +35,11 @@ class AreaDataServiceImpl(AreaDataService):
             # Convert PostGIS geometry to GeoJSON format
             geom_shape = to_shape(area.geometry)
             geom_dict = mapping(geom_shape)
+
+            name = area.name  
             
             # Create DTO
-            area_dto = AreaDTO(id=area.id, geometry=geom_dict) #
+            area_dto = AreaDTO(id=area.id, geometry=geom_dict, name=name)
             area_dtos.append(area_dto)
         
         return area_dtos
