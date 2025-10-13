@@ -1,7 +1,10 @@
-from geoalchemy2.shape import from_shape, to_shape
-from sqlalchemy.orm import Session
-from shapely.geometry import shape, mapping
 from typing import List
+
+from geoalchemy2.shape import from_shape
+from geoalchemy2.shape import to_shape
+from shapely.geometry import mapping
+from shapely.geometry import shape
+from sqlalchemy.orm import Session
 
 from backend.application.data_services.area_data_service import AreaDataService
 from backend.application.dtos.area_dto import AreaDTO
@@ -12,12 +15,12 @@ class AreaDataServiceImpl(AreaDataService):
     def __init__(self, session: Session):
         self.session = session
 
-    def save_area(self, area_dto: AreaDTO) -> int:
+    def save_area(self, area_dto: AreaDTO, name: str) -> int:
         geom = from_shape(shape(area_dto.geometry))
         aoim = AreaOfInterestModel(
-            id=area_dto.id,
+            id=area_dto.area_id,
             geometry=geom,
-            name=area_dto.name
+            name=name
         )
         self.session.add(aoim)
         self.session.commit()
@@ -28,18 +31,12 @@ class AreaDataServiceImpl(AreaDataService):
     def get_all_areas(self) -> List[AreaDTO]:
         # Query all areas from database
         areas = self.session.query(AreaOfInterestModel).all()
-        
-        # Convert to DTOs
-        area_dtos = []
-        for area in areas:
-            # Convert PostGIS geometry to GeoJSON format
-            geom_shape = to_shape(area.geometry)
-            geom_dict = mapping(geom_shape)
 
-            name = area.name  
-            
-            # Create DTO
-            area_dto = AreaDTO(id=area.id, geometry=geom_dict, name=name)
-            area_dtos.append(area_dto)
-        
-        return area_dtos
+        return [
+            AreaDTO.from_model(
+                area.id,
+                # Convert WKB to GeoJSON format
+                mapping(to_shape(area.geometry)),
+                area.name
+            ) for area in areas
+        ]

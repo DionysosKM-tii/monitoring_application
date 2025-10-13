@@ -27,7 +27,6 @@ def upgrade() -> None:
                                                                      from_text='ST_GeomFromEWKT', name='geometry'),
                               nullable=True),
                     sa.PrimaryKeyConstraint('id'),
-                    sa.Column('name', sa.String(length=255), nullable=False)),
                     schema='public'
                     )
     # ### end Alembic commands ###

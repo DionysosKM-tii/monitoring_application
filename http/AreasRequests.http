@@ -1,8 +1,9 @@
-# Create Area
+### Create Area
 POST {{host}}/areas/create
 Content-Type: application/json
 
 {
+  "name": "Test Area",
   "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -83,3 +84,6 @@ Content-Type: application/json
     ]
   }
 }
+
+### Get All Areas
+GET {{host}}/areas
