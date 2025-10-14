@@ -7,5 +7,5 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 
 
-def get_session():
+def postgis_get_session():
     return SessionLocal()
