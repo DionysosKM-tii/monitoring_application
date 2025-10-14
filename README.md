@@ -12,3 +12,8 @@ Once the DB is up, perform the migrations by running: `alembic upgrade head`.
 ## Run the application
 To run the application run: `python -m uvicorn backend.app:app --reload`.  
 This will have the application running on: `http://localhost:8000`
+
+## Run the frontend 
+To run the frontend run : `python home_page.py`
+This will have the frontend running on: `http://localhost:8080`
+A new tab with the homepage will open automatically on your browser if not go to `http://localhost:8080` manually
