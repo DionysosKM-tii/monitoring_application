@@ -8,7 +8,7 @@ class ApiClient:
     def __init__(self, base_url: str = "http://localhost:8000"):
         self.base_url = base_url
     
-    def post_area(self, geometry: Dict[str, Any]) -> Dict[str, Any]:
+    def post_area(self, geometry: Dict[str, Any], name: str = "") -> Dict[str, Any]:
         """
         Send area geometry to backend for creation.
         
@@ -22,7 +22,7 @@ class ApiClient:
             requests.RequestException: If API call fails
         """
         url = f"{self.base_url}/areas/create"
-        payload = {"geometry": geometry}
+        payload = {"geometry": geometry, "name": name}
         
         try:
             response = requests.post(url, json=payload, timeout=10)
@@ -55,7 +55,7 @@ class ApiClient:
             response.raise_for_status()  # Raises exception for HTTP error codes
             
             data = response.json()
-            return data.get("areas", [])
+            return [item.get("geometry", item) for item in data]
             
         except requests.exceptions.ConnectionError:
             raise Exception("Could not connect to backend server. Is it running?")
