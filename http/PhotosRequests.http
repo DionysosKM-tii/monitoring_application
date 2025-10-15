@@ -1,0 +1,18 @@
+### Add photo
+POST http://localhost:8000/photos/add
+Content-Type: multipart/form-data; boundary=AddPhotoBoundary
+
+--AddPhotoBoundary
+Content-Disposition: form-data; name="area_id"
+
+123
+--AddPhotoBoundary
+Content-Disposition: form-data; name="photo_date"
+
+2025-10-15
+--AddPhotoBoundary
+Content-Disposition: form-data; name="photo"; filename="test.png"
+Content-Type: image/png
+
+< test.png
+--AddPhotoBoundary--

@@ -4,6 +4,7 @@ from backend.application.use_cases.area_use_cases import AreaUseCases
 from backend.data.configs.postgis_config import postgis_get_session
 from backend.data.impls.area_data_service_impl import AreaDataServiceImpl
 from backend.interfaces.controllers.areas_controller import AreasController
+from backend.interfaces.controllers.photos_contoller import PhotosController
 
 app = FastAPI()
 
@@ -15,5 +16,7 @@ area_data_service = AreaDataServiceImpl(postgis_session)
 area_use_cases = AreaUseCases(area_data_service=area_data_service)
 # Controllers
 areas_controller = AreasController(area_use_cases)
+photos_controller = PhotosController()
 
 app.include_router(areas_controller.router)
+app.include_router(photos_controller.router)
