@@ -11,8 +11,8 @@ class AreaUseCases:
     area_data_service: AreaDataService
 
     def create_area(self, geometry: dict, name: str) -> None:
-        area = AreaOfInterest.create_area(geometry)
-        self.area_data_service.save_area(AreaDTO.from_domain(area), name)
+        area_entity = AreaOfInterest.create_area(geometry)
+        self.area_data_service.save_area(AreaDTO.from_domain(area_entity), name)
 
     def get_all_areas(self) -> List[AreaDTO]:
         return self.area_data_service.get_all_areas()

@@ -4,7 +4,7 @@ from alembic import context
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
-from backend.data.models.area_of_interest_model import Base
+from backend.data.models import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,7 +20,8 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
-target_metadata = Base.metadata
+target_metadata = [Base.metadata]
+my_models = target_metadata[0].tables.keys()
 
 
 # other values from the config, defined by the needs of env.py,
@@ -30,7 +31,7 @@ target_metadata = Base.metadata
 
 # This is needed to only take into account tables in the public schema, when --autogenerate is used.
 def include_object(object, name, type_, reflected, compare_to):
-    if type_ == "table" and object.schema != "public":
+    if name not in my_models:
         return False
 
     return True

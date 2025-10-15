@@ -5,7 +5,7 @@ Content-Type: multipart/form-data; boundary=AddPhotoBoundary
 --AddPhotoBoundary
 Content-Disposition: form-data; name="area_id"
 
-123
+1
 --AddPhotoBoundary
 Content-Disposition: form-data; name="photo_date"
 

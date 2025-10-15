@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from http import HTTPStatus
 
 from fastapi import APIRouter
 
@@ -14,7 +15,7 @@ class AreasController:
     def __post_init__(self):
         self.router = APIRouter(prefix="/areas", tags=["areas"])
 
-        self.router.post("/create", status_code=201)(self.create_area)
+        self.router.post("/create", status_code=HTTPStatus.CREATED)(self.create_area)
         self.router.get("")(self.get_all_areas)
 
     async def create_area(self, request: CreateAreaRequest) -> None:
