@@ -9,10 +9,7 @@ async def home_page():
     
     try:
         create_sidebar()
-        
         m = create_map()
-        await m.initialized()
-        
         load_existing_areas_on_map(m)
         
     except Exception as e:
