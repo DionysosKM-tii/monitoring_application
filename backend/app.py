@@ -1,6 +1,9 @@
-from fastapi import FastAPI, APIRouter
+from urllib.request import Request
 
-from backend.application.service_ports.storage_port import StoragePort
+from fastapi import FastAPI, APIRouter
+from starlette.responses import JSONResponse
+
+from backend.application.exceptions.base_esception import ApplicationException
 from backend.application.use_cases.area_use_cases import AreaUseCases
 from backend.application.use_cases.photo_use_cases import PhotoUseCases
 from backend.data.configs.postgis_config import postgis_get_session
@@ -8,9 +11,21 @@ from backend.data.impls.area_data_service_impl import AreaDataServiceImpl
 from backend.data.impls.photo_data_service_impl import PhotoDataServiceImpl
 from backend.interfaces.controllers.areas_controller import AreasController
 from backend.interfaces.controllers.photos_contoller import PhotosController
-from backend.interfaces.storage.FilesystemStorage import FilesystemStorage
+from backend.interfaces.storage.filesystem_storage import FilesystemStorage
 
 app = FastAPI()
+
+
+@app.exception_handler(ApplicationException)
+async def application_exception_handler(request: Request, exc: ApplicationException):
+    return JSONResponse(
+        status_code=exc.http_status_code.value,
+        content={
+            "message": exc.message,
+            "error_code": exc.error_code
+        }
+    )
+
 
 router = APIRouter()
 postgis_session = postgis_get_session()
