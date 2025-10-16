@@ -1,6 +1,6 @@
 from http import HTTPStatus
 
-from backend.application.exceptions.base_esception import ApplicationException
+from backend.application.exceptions.application_exception import ApplicationException
 
 
 class StorageException(ApplicationException):

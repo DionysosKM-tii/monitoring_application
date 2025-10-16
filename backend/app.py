@@ -3,7 +3,7 @@ from urllib.request import Request
 from fastapi import FastAPI, APIRouter
 from starlette.responses import JSONResponse
 
-from backend.application.exceptions.base_esception import ApplicationException
+from backend.application.exceptions.application_exception import ApplicationException
 from backend.application.use_cases.area_use_cases import AreaUseCases
 from backend.application.use_cases.photo_use_cases import PhotoUseCases
 from backend.data.configs.postgis_config import postgis_get_session

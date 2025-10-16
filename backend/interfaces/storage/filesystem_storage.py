@@ -1,15 +1,20 @@
 import os
 
+from dotenv import load_dotenv
+
 from backend.application.exceptions.application_error_code import ApplicationErrorCode
 from backend.application.exceptions.storage_exception import StorageException
 from backend.application.service_ports.storage_port import StoragePort
+
+load_dotenv()
+
+PHOTOS_DIR = os.getenv("PHOTOS_STORE_PATH")
 
 
 class FilesystemStorage(StoragePort):
 
     def store_photo(self, photo_name: str, photo_data: bytes) -> str:
-        photos_dir = "photos/"
-        photo_full_path = photos_dir + photo_name
+        photo_full_path = PHOTOS_DIR + photo_name
 
         try:
             with open(photo_full_path, "wb") as photo_file:

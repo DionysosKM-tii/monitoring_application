@@ -9,6 +9,9 @@ Create the conda environment by running: `conda env create -f environment.yml`
 Start the postgis DB by running: `docker compose up -d`  
 Once the DB is up, perform the migrations by running: `alembic upgrade head`. 
 
+Copy template.env to .env and modify the variables as needed. Keep the existing values to have the defaults,  
+and for the missing values, follow the explanation in the file.
+
 ## Run the application
 To run the application run: `python -m uvicorn backend.app:app --reload`.  
 This will have the application running on: `http://localhost:8000`
