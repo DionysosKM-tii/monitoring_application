@@ -1,13 +1,12 @@
 from typing import List
 
 from geoalchemy2.shape import from_shape
-from geoalchemy2.shape import to_shape
-from shapely.geometry import mapping
 from shapely.geometry import shape
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, Query
 
 from backend.application.data_services.area_data_service import AreaDataService
 from backend.application.dtos.area_dto import AreaDTO
+from backend.data.mappers import area_of_interest_model_mappers as area_mapper
 from backend.data.models.area_of_interest_model import AreaOfInterestModel
 
 
@@ -27,13 +26,7 @@ class AreaDataServiceImpl(AreaDataService):
         self.session.refresh(aoim)
 
     def get_all_areas(self) -> List[AreaDTO]:
-        areas = self.session.query(AreaOfInterestModel).all()
+        query: Query[AreaOfInterestModel] = self.session.query(AreaOfInterestModel)
+        areas = query.all()
 
-        return [
-            AreaDTO.from_model(
-                area.id,
-                # Convert WKB to GeoJSON format
-                mapping(to_shape(area.geometry)),
-                area.name
-            ) for area in areas
-        ]
+        return [area_mapper.to_dto(area) for area in areas]
