@@ -12,10 +12,10 @@ class PhotoDTO:
     photo_date: date
 
     @staticmethod
-    def from_domain(photo: Photo, photo_dir: str):
+    def from_domain(photo: Photo, photo_full_path: str):
         return PhotoDTO(
             photo_id=photo.id,
             area_id=photo.area_id,
-            photo_full_path=f"{photo_dir}{photo.photo_name}",
+            photo_full_path=photo_full_path,
             photo_date=photo.photo_date
         )
