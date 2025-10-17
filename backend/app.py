@@ -1,7 +1,7 @@
 from urllib.request import Request
 
 from fastapi import FastAPI, APIRouter
-from starlette.responses import JSONResponse
+from fastapi.responses import JSONResponse
 
 from backend.application.exceptions.application_exception import ApplicationException
 from backend.application.use_cases.area_use_cases import AreaUseCases
