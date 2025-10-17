@@ -22,7 +22,7 @@ def test_create_area():
 def test_get_all_areas():
     # Arrange
     area_data_service = Mock()
-    expected_areas = [AreaDTO.from_model(1, None, "Area1")]
+    expected_areas = [AreaDTO(1, None, "Area1")]
     area_data_service.get_all_areas.return_value = expected_areas
     use_cases = AreaUseCases(area_data_service=area_data_service)
     # Act
