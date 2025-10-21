@@ -5,7 +5,7 @@ from components.sidebar_tools.tool_2 import create_tool_2
 
 def create_sidebar():
     """Create the collapsible sidebar with tools."""
-    drawer = ui.left_drawer(value=True).classes('bg-gray-100 w-80 p-3')
+    drawer = ui.left_drawer(value=False).classes('bg-gray-100 w-80 p-3')
     with drawer:
         ui.label('Tools').classes('text-lg font-semibold')
         ui.separator()

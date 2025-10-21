@@ -1,11 +1,15 @@
 import requests
 from typing import Dict, Any, List
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+BACKEND_ENDPOINT = os.getenv("BACKEND_ENDPOINT", None)
 
 class ApiClient:
     """HTTP client for communicating with the FastAPI backend."""
     
-    def __init__(self, base_url: str = "http://localhost:8000"):
+    def __init__(self, base_url: str = BACKEND_ENDPOINT):
         self.base_url = base_url
     
     def post_area(self, geometry: Dict[str, Any], name: str = "") -> Dict[str, Any]:
@@ -43,7 +47,7 @@ class ApiClient:
         Get all saved areas from backend.
         
         Returns:
-            list: List of GeoJSON geometry objects
+            list: List of area objects with id, geometry, and name fields
             
         Raises:
             requests.RequestException: If API call fails
