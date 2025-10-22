@@ -16,3 +16,6 @@ Content-Type: image/png
 
 < test.png
 --AddPhotoBoundary--
+
+### Get photos by area
+GET http://localhost:8000/photos/1

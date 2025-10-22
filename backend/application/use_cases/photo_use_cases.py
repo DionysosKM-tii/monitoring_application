@@ -17,3 +17,7 @@ class PhotoUseCases:
 
         photo_full_path = self.storage_port.store_photo(photo_entity.photo_name, photo_data)
         self.photos_data_service.save_photo(PhotoDTO.from_domain(photo_entity, photo_full_path))
+
+    def get_photos_by_area(self, area_id: int) -> list[PhotoDTO]:
+        return self.photos_data_service.get_photos_by_area(area_id)
+

@@ -19,3 +19,18 @@ class PhotoDataServiceImpl(PhotosDataService):
         self.session.add(photo_model)
         self.session.commit()
         self.session.refresh(photo_model)
+
+    def get_photos_by_area(self, area_id: int) -> list[PhotoDTO]:
+        photo_models = self.session.query(UploadedPhotoModel).filter(
+            UploadedPhotoModel.area_id == area_id
+        ).all()
+        
+        return [
+            PhotoDTO(
+                photo_id=model.id,
+                area_id=model.area_id,
+                photo_full_path=model.photo_full_path,
+                photo_date=model.photo_date
+            )
+            for model in photo_models
+        ]
