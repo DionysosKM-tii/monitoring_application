@@ -1,7 +1,7 @@
 from nicegui import ui
 from components.map_component import create_map, load_existing_areas_on_map
 from components.sidebar import create_sidebar
-"""
+
 import debugpy
 
 # Enable debugger on port 5678
@@ -9,7 +9,7 @@ debugpy.listen(5678)
 print("⏳ Waiting for debugger to attach...")
 debugpy.wait_for_client()
 print("✅ Debugger attached!")
-"""
+
 
 @ui.page('/')
 async def home_page():

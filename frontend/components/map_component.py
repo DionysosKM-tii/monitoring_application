@@ -3,19 +3,25 @@ from nicegui import ui
 from event_listeners.draw_event_listener import handle_draw
 from event_listeners.click_event_listener import handle_click
 from clients.api_client import api_client
+from shapely.geometry import shape as shapely_shape
 
 def load_existing_areas_on_map(map_instance):
     """Load all saved areas and display them on the map."""
     try:
         areas = api_client.get_all_areas()
-        
-        for area_geometry in areas:
-            coords = area_geometry['coordinates'][0]  # Get coordinate ring
-            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in coords[:-1]]  # Convert [lng,lat] to (lat,lng), skip duplicate
-            map_instance.generic_layer(name='polygon', args=[nicegui_coords])
+        area_info = {}
 
+        for area in areas:
+            coords = area['geometry']['coordinates'][0]  # Get coordinate ring
+            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in coords[:-1]]  # Convert [lng,lat] to (lat,lng), skip duplicate
+            layer = map_instance.generic_layer(name='polygon', args=[nicegui_coords])
+            area_info[layer.id] = {
+                'id': area['id'],
+                'name': area.get('name', '—'),
+            }
         ui.notify(f'Processed {len(areas)} areas from database', type='positive')
-        
+
+        map_instance.area_info = area_info  # Attach area info to map for later use    
     except Exception as e:
         print(f"Load areas error: {e}")
         ui.notify(f'Failed to load areas: {str(e)}', type='negative')

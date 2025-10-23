@@ -59,7 +59,7 @@ class ApiClient:
             response.raise_for_status()  # Raises exception for HTTP error codes
             
             data = response.json()
-            return [item.get("geometry", item) for item in data]
+            return data
             
         except requests.exceptions.ConnectionError:
             raise Exception("Could not connect to backend server. Is it running?")
