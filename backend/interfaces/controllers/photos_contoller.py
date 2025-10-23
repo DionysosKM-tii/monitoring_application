@@ -7,6 +7,7 @@ from backend.application.use_cases.photo_use_cases import PhotoUseCases
 from backend.interfaces.controllers.requests.add_photo_request import AddPhotoRequest
 from backend.interfaces.controllers.views.photo_views import GetPhotoView
 
+
 @dataclass
 class PhotosController:
     photo_use_cases: PhotoUseCases
@@ -23,6 +24,9 @@ class PhotosController:
 
     async def get_photos_by_area(self, area_id: int) -> list[GetPhotoView]:
         photo_dtos = self.photo_use_cases.get_photos_by_area(area_id)
-        return [GetPhotoView.from_dto(dto) for dto in photo_dtos]
 
-
+        return [
+            GetPhotoView.from_dto(
+                dto
+            ) for dto in photo_dtos
+        ]

@@ -1,3 +1,4 @@
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from backend.application.data_services.photos_data_service import PhotosDataService
@@ -21,9 +22,10 @@ class PhotoDataServiceImpl(PhotosDataService):
         self.session.refresh(photo_model)
 
     def get_photos_by_area(self, area_id: int) -> list[PhotoDTO]:
-        photo_models = self.session.query(UploadedPhotoModel).filter(
+        query = select(UploadedPhotoModel).filter(
             UploadedPhotoModel.area_id == area_id
-        ).all()
+        )
+        photo_models = self.session.scalars(query).all()
         
         return [
             PhotoDTO(

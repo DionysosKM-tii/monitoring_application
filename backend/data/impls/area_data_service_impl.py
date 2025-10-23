@@ -2,7 +2,8 @@ from typing import List
 
 from geoalchemy2.shape import from_shape
 from shapely.geometry import shape
-from sqlalchemy.orm import Session, Query
+from sqlalchemy import select
+from sqlalchemy.orm import Session
 
 from backend.application.data_services.area_data_service import AreaDataService
 from backend.application.dtos.area_dto import AreaDTO
@@ -26,7 +27,11 @@ class AreaDataServiceImpl(AreaDataService):
         self.session.refresh(aoim)
 
     def get_all_areas(self) -> List[AreaDTO]:
-        query: Query[AreaOfInterestModel] = self.session.query(AreaOfInterestModel)
-        areas = query.all()
+        query = select(AreaOfInterestModel)
+        areas = self.session.scalars(query).all()
 
-        return [area_mapper.to_dto(area) for area in areas]
+        return [
+            area_mapper.to_dto(
+                area
+            ) for area in areas
+        ]
