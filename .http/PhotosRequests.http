@@ -1,5 +1,5 @@
 ### Add photo
-POST http://localhost:8000/photos/add
+POST {{host}}/photos/add
 Content-Type: multipart/form-data; boundary=AddPhotoBoundary
 
 --AddPhotoBoundary
@@ -16,3 +16,6 @@ Content-Type: image/png
 
 < test.png
 --AddPhotoBoundary--
+
+### Get photos by area
+GET {{host}}/photos/1
