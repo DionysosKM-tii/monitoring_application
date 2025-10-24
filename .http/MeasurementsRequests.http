@@ -1,0 +1,10 @@
+### Import Measurements Data
+POST {{host}}/measurements/import-measurements/1
+Content-Type: multipart/form-data; boundary=ImportMeasurementsBoundary
+
+--ImportMeasurementsBoundary
+Content-Disposition: form-data; name="measurements"; filename="test.csv"
+Content-Type: text/csv
+
+< test.csv
+--ImportMeasurementsBoundary--
