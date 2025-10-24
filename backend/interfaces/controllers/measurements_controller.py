@@ -5,6 +5,8 @@ from http import HTTPStatus
 from fastapi import APIRouter, Depends
 
 from backend.application.dtos.measurement_dto import MeasurementDTO
+from backend.application.exceptions.application_error_code import ApplicationErrorCode
+from backend.application.exceptions.invalid_import_exception import InvalidImportException
 from backend.application.use_cases.measurements_use_cases import MeasurementsUseCases
 from backend.interfaces.controllers.requests.import_measurements_request import ImportMeasurementsRequest
 
@@ -28,19 +30,16 @@ class MeasurementsController:
     @staticmethod
     def _from_csv_row_to_measurement_dto(area_id: int, csv_row: str) -> MeasurementDTO:
         if not csv_row.strip():
-            # TODO: raise exception
-            raise Exception("Empty CSV row")
+            raise InvalidImportException("Empty csv row.", ApplicationErrorCode.IMPORT_MEASUREMENTS_ERROR.name)
         columns = [col.strip() for col in csv_row.split(",")]
         if len(columns) != 3:
-            # TODO: raise exception
-            raise Exception("Invalid CSV row")
+            raise InvalidImportException(f"Wrong format for row: {csv_row}", ApplicationErrorCode.IMPORT_MEASUREMENTS_ERROR.name)
         try:
             timestamp = datetime.strptime(columns[0], "%m/%d/%Y")
             metric_type = columns[1]
             metric_value = float(columns[2])
         except Exception as e:
-            # TODO: raise exception
-            raise Exception("Invalid CSV row")
+            raise InvalidImportException(f"Not able to parse row: {csv_row}", ApplicationErrorCode.IMPORT_MEASUREMENTS_ERROR.name)
 
         return MeasurementDTO(
             measurement_id=None,
