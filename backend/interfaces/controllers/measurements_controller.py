@@ -9,6 +9,7 @@ from backend.application.exceptions.application_error_code import ApplicationErr
 from backend.application.exceptions.invalid_import_exception import InvalidImportException
 from backend.application.use_cases.measurements_use_cases import MeasurementsUseCases
 from backend.interfaces.controllers.requests.import_measurements_request import ImportMeasurementsRequest
+from backend.interfaces.controllers.views.measurement_views import GetMeasurementView
 
 
 @dataclass
@@ -19,6 +20,7 @@ class MeasurementsController:
         self.router = APIRouter(prefix="/measurements", tags=["measurements"])
 
         self.router.post("/import-measurements/{area_id}", status_code=HTTPStatus.ACCEPTED)(self.import_measurements)
+        self.router.get("/{area_id}", status_code=HTTPStatus.OK)(self.get_measurements_for_area_id)
 
     async def import_measurements(self, area_id: int, request: ImportMeasurementsRequest = Depends()):
         # csv_data = await request.measurements.read()
@@ -26,6 +28,15 @@ class MeasurementsController:
         measurements_dtos = [self._from_csv_row_to_measurement_dto(area_id, row) for row in csv_rows]
 
         self.measurement_use_cases.import_measurements_from_csv(measurements_dtos)
+
+    async def get_measurements_for_area_id(self, area_id: int) -> list[GetMeasurementView]:
+        measurements_dtos = self.measurement_use_cases.get_measurements_for_area_id(area_id)
+
+        return [
+            GetMeasurementView.from_dto(
+                dto
+            ) for dto in measurements_dtos
+        ]
 
     @staticmethod
     def _from_csv_row_to_measurement_dto(area_id: int, csv_row: str) -> MeasurementDTO:

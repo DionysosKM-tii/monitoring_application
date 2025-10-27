@@ -18,7 +18,7 @@ class Measurement(Entity):
     def add_new_measurement(cls, area_id: int, timestamp: date, metric_type: str, metric_value: float):
         if metric_type not in MetricType:
             raise NotSupportedMetricTypeException(
-                f"Metric type {metric_type} is not supported", ApplicationErrorCode.NOT_SUPPORTED_METRIC_ERROR.name
+                f"Metric type: {metric_type} is not supported", ApplicationErrorCode.NOT_SUPPORTED_METRIC_ERROR.name
             )
         metric = Metric(
             type=MetricType[metric_type],

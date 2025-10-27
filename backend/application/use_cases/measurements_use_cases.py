@@ -11,6 +11,8 @@ class MeasurementsUseCases:
 
     def import_measurements_from_csv(self, measurements_dtos: list[MeasurementDTO]) -> None:
         for measurement_dto in measurements_dtos:
+            # `measurement` is not used here, but we should pass through the domain, because this is where we check if the metric type is supported
+            # Alternatively, we could expose a method from the domain entity that performs this check
             measurement = Measurement.add_new_measurement(
                 measurement_dto.area_id,
                 measurement_dto.timestamp,
@@ -21,3 +23,6 @@ class MeasurementsUseCases:
             #but since here we are not really changing the data, we can just use the dto
             self.measurements_data_service.save_measurement(measurement_dto)
 
+
+    def get_measurements_for_area_id(self, area_id: int) -> list[MeasurementDTO]:
+        return self.measurements_data_service.get_measurements_for_area_id(area_id)

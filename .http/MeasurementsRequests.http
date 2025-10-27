@@ -8,3 +8,7 @@ Content-Type: text/csv
 
 < test.csv
 --ImportMeasurementsBoundary--
+
+
+### Get Measurements for AreaID 1
+GET {{host}}/measurements/1
