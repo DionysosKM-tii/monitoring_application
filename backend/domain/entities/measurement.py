@@ -16,7 +16,7 @@ class Measurement(Entity):
 
     @classmethod
     def add_new_measurement(cls, area_id: int, timestamp: date, metric_type: str, metric_value: float):
-        if metric_type not in MetricType:
+        if not cls.is_metric_type_supported(metric_type):
             raise NotSupportedMetricTypeException(
                 f"Metric type: {metric_type} is not supported", ApplicationErrorCode.NOT_SUPPORTED_METRIC_ERROR.name
             )
@@ -30,3 +30,7 @@ class Measurement(Entity):
             timestamp=timestamp,
             metric=metric
         )
+
+    @staticmethod
+    def is_metric_type_supported(metric_type: str) -> bool:
+        return metric_type in MetricType

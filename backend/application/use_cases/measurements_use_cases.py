@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from backend.application.data_services.measurements_data_service import MeasurementsDataService
 from backend.application.dtos.measurement_dto import MeasurementDTO
@@ -20,9 +21,11 @@ class MeasurementsUseCases:
                 measurement_dto.metric_value
             )
             # Normally here we should transform the entity object back to a DTO,
-            #but since here we are not really changing the data, we can just use the dto
+            # but since here we are not really changing the data, we can just use the dto
             self.measurements_data_service.save_measurement(measurement_dto)
 
-
-    def get_measurements_for_area_id(self, area_id: int) -> list[MeasurementDTO]:
-        return self.measurements_data_service.get_measurements_for_area_id(area_id)
+    def get_measurements_for_area_id(self, area_id: int, metric_type: Optional[str]) -> list[MeasurementDTO]:
+        if Measurement.is_metric_type_supported(metric_type):
+            return self.measurements_data_service.get_measurements_for_area_id_and_metric_type(area_id, metric_type)
+        else:
+            return self.measurements_data_service.get_measurements_for_area_id(area_id)

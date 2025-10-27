@@ -12,3 +12,6 @@ Content-Type: text/csv
 
 ### Get Measurements for AreaID 1
 GET {{host}}/measurements/1
+
+### Get Measurements for AreaID 1 for metric "CO"
+GET {{host}}/measurements/1?metric=NO

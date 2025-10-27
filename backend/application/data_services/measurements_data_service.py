@@ -12,3 +12,7 @@ class MeasurementsDataService(ABC):
     @abstractmethod
     def get_measurements_for_area_id(self, area_id: int) -> list[MeasurementDTO]:
         pass
+
+    @abstractmethod
+    def get_measurements_for_area_id_and_metric_type(self, area_id: int, metric_type: str) -> list[MeasurementDTO]:
+        pass

@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from datetime import datetime
 from http import HTTPStatus
+from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 
 from backend.application.dtos.measurement_dto import MeasurementDTO
 from backend.application.exceptions.application_error_code import ApplicationErrorCode
@@ -23,14 +24,17 @@ class MeasurementsController:
         self.router.get("/{area_id}", status_code=HTTPStatus.OK)(self.get_measurements_for_area_id)
 
     async def import_measurements(self, area_id: int, request: ImportMeasurementsRequest = Depends()):
-        # csv_data = await request.measurements.read()
         csv_rows = request.measurements.file.read().decode("utf-8").split("\n")[1:]
         measurements_dtos = [self._from_csv_row_to_measurement_dto(area_id, row) for row in csv_rows]
 
         self.measurement_use_cases.import_measurements_from_csv(measurements_dtos)
 
-    async def get_measurements_for_area_id(self, area_id: int) -> list[GetMeasurementView]:
-        measurements_dtos = self.measurement_use_cases.get_measurements_for_area_id(area_id)
+    async def get_measurements_for_area_id(
+            self,
+            area_id: int,
+            metric: Optional[str] = Query(None, alias="metric")
+    ) -> list[GetMeasurementView]:
+        measurements_dtos = self.measurement_use_cases.get_measurements_for_area_id(area_id, metric)
 
         return [
             GetMeasurementView.from_dto(

@@ -37,3 +37,20 @@ class MeasurementsDataServiceImpl(MeasurementsDataService):
                 metric_value=model.value
             ) for model in measurements_models
         ]
+
+    def get_measurements_for_area_id_and_metric_type(self, area_id: int, metric_type: str) -> list[MeasurementDTO]:
+        query = select(MeasurementsModel).filter(
+            MeasurementsModel.area_id == area_id,
+            MeasurementsModel.type == metric_type
+        )
+        measurements_models = self.session.scalars(query).all()
+
+        return [
+            MeasurementDTO(
+                measurement_id=model.id,
+                area_id=model.area_id,
+                timestamp=model.timestamp,
+                metric_type=model.type,
+                metric_value=model.value
+            ) for model in measurements_models
+        ]
