@@ -1,7 +1,6 @@
 from nicegui import ui
 
 from frontend.components.map_component import create_map, load_existing_areas_on_map
-from frontend.components.sidebar import create_sidebar
 
 
 @ui.page('/')
@@ -13,7 +12,6 @@ async def home_page():
     ui.query('.nicegui-content').style('padding: 0; height: 100vh; width: 100vw;')
 
     try:
-        create_sidebar()
         m = create_map()
         load_existing_areas_on_map(m)
 

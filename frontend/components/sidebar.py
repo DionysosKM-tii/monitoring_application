@@ -1,36 +1,38 @@
-from nicegui import ui
+from typing import Optional
+
+from nicegui import ui, context
+
+from frontend.components.dtos.area_details_dto import AreaDetailsDTO
 from frontend.components.sidebar_tools.tool_1 import create_tool_1
 from frontend.components.sidebar_tools.tool_2 import create_tool_2
 
-def create_sidebar():
-    global DRAWER, AREA_TITLE
 
-    DRAWER = ui.left_drawer(value=False).classes('bg-gray-100 w-80 p-3')
-    with DRAWER:
-        AREA_TITLE = ui.label('').classes('text-lg font-semibold')
-        ui.separator()
+class Sidebar:
 
-        # Create individual tools
-        create_tool_1()
-        create_tool_2()
-    
-    return DRAWER
+    def __init__(self):
+        self._drawer = ui.left_drawer(value=False).classes('bg-gray-100 w-80 p-3')
+        self._current_area: Optional[AreaDetailsDTO] = None
+
+    def show(self, area_details: AreaDetailsDTO):
+        self._current_area = area_details
+
+        self._drawer.clear()
+        with self._drawer:
+            ui.label(area_details.area_name).classes('text-lg font-semibold')
+            ui.separator()
+            create_tool_1()
+            create_tool_2()
+        self._drawer.set_value(True)
+
+    def hide(self):
+        self._drawer.set_value(False)
+        self._current_area = None
 
 
-def sidebar_show(area: dict) -> None:
-    if not DRAWER or not AREA_TITLE:
-        return
+def get_sidebar() -> Sidebar:
+    client = context.client
 
-    AREA_TITLE.set_text(area['area_name'])
-    DRAWER.set_value(True)
+    if not hasattr(client, '_sidebar_instance'):
+        client._sidebar_instance = Sidebar()
 
-
-
-def sidebar_hide() -> None:
-    if not DRAWER:
-        return
-
-    DRAWER.set_value(False)
-
-    if AREA_TITLE:
-        AREA_TITLE.set_text('')
+    return client._sidebar_instance

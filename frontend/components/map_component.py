@@ -4,6 +4,7 @@ from shapely import Point
 from shapely.geometry.polygon import Polygon
 
 from frontend.clients.api_client import api_client
+from frontend.components.dtos.area_details_dto import AreaDetailsDTO
 from frontend.event_listeners.draw_event_listener import handle_draw
 from frontend.event_listeners.map_event_listener import on_area_selected, on_area_deselected
 
@@ -22,6 +23,7 @@ def load_existing_areas_on_map(map_instance):
             area_geometry = area['geometry']
 
             coords = area_geometry['coordinates'][0]  # Get coordinate ring
+            # Add the area to a global list, which we can retrieve later during the `.on('map-click')` event
             AREAS.append(
                 {
                     "area_id": area['id'],
@@ -84,9 +86,9 @@ def on_map_click(e: GenericEventArguments) -> None:
 
     for area in AREAS:
         polygon = Polygon(area['area_coords'])
-
+        # An area was clicked
         if polygon.contains(clicked_point):
-            on_area_selected(area)
+            on_area_selected(AreaDetailsDTO(area['area_id'], area['area_name']))
             return
-
+    # No area was clicked
     on_area_deselected()

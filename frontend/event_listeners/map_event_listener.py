@@ -1,9 +1,10 @@
-from frontend.components.sidebar import sidebar_show, sidebar_hide
+from frontend.components.dtos.area_details_dto import AreaDetailsDTO
+from frontend.components.sidebar import get_sidebar
 
 
-def on_area_selected(area: dict) -> None:
-    sidebar_show(area)
+def on_area_selected(area_details: AreaDetailsDTO) -> None:
+    get_sidebar().show(area_details)
 
 
 def on_area_deselected() -> None:
-    sidebar_hide()
+    get_sidebar().hide()
