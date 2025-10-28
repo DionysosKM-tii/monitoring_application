@@ -1,12 +1,20 @@
 from nicegui import ui
+from nicegui.events import GenericEventArguments
+from shapely import Point
+from shapely.geometry.polygon import Polygon
 
 from frontend.clients.api_client import api_client
 from frontend.event_listeners.draw_event_listener import handle_draw
+from frontend.event_listeners.map_event_listener import on_area_selected, on_area_deselected
+
+AREAS: list[dict] = []
 
 
 def load_existing_areas_on_map(map_instance):
     """Load all saved areas and display them on the map."""
     try:
+
+        AREAS.clear()
 
         areas = api_client.get_all_areas()
 
@@ -14,18 +22,20 @@ def load_existing_areas_on_map(map_instance):
             area_geometry = area['geometry']
 
             coords = area_geometry['coordinates'][0]  # Get coordinate ring
-            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in
-                              coords[:-1]]  # Convert [lng,lat] to (lat,lng), skip duplicate
-            layer = map_instance.generic_layer(
+            AREAS.append(
+                {
+                    "area_id": area['id'],
+                    "area_name": area['name'],
+                    "area_coords": coords[:-1]  # Skip duplicate last point
+                }
+            )
+            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in coords[:-1]]
+
+            map_instance.generic_layer(
                 name='polygon',
-                args=[
-                    nicegui_coords,
-                    {'area_id': area['id']},
-                    {'area_name': area['name']}
-                ]
+                args=[nicegui_coords]
             )
 
-        ui.notify(f'Processed {len(areas)} areas from database', type='positive')
 
     except Exception as e:
         print(f"Load areas error: {e}")
@@ -53,11 +63,30 @@ def create_map():
     # Create the leaflet map
     m = ui.leaflet(center=(51.505, -0.09), zoom=12, draw_control=draw_control)
     # full width; height fills the viewport minus the header (approx 64px)
-    m.classes('w-full h-[calc(100vh-64px)]')
+    m.classes('w-full h-screen')
 
     # Register event handlers
     m.on('draw:created', handle_draw)
     m.on('draw:edited', lambda: ui.notify('Edit completed'))
     m.on('draw:deleted', lambda: ui.notify('Delete completed'))
 
+    m.on('map-click', on_map_click)
+
     return m
+
+
+def on_map_click(e: GenericEventArguments) -> None:
+    latlng = e.args.get('latlng', {})
+    if not latlng:
+        return
+
+    clicked_point = Point(latlng['lng'], latlng['lat'])
+
+    for area in AREAS:
+        polygon = Polygon(area['area_coords'])
+
+        if polygon.contains(clicked_point):
+            on_area_selected(area)
+            return
+
+    on_area_deselected()
