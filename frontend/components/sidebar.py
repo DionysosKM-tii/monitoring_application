@@ -5,6 +5,7 @@ from nicegui import ui, context
 from frontend.components.dtos.area_details_dto import AreaDetailsDTO
 from frontend.components.sidebar_tools.tool_1 import create_tool_1
 from frontend.components.sidebar_tools.tool_2 import create_tool_2
+from frontend.event_listeners.photos_event_listener import display_slideshow_for_area
 
 
 class Sidebar:
@@ -22,6 +23,8 @@ class Sidebar:
             ui.separator()
             create_tool_1()
             create_tool_2()
+            ui.separator()
+            ui.button('Show Slideshow', on_click=lambda: display_slideshow_for_area(area_details.area_id))
         self._drawer.set_value(True)
 
     def hide(self):
