@@ -1,24 +1,36 @@
 from nicegui import ui
-from event_listeners.draw_event_listener import handle_draw
-from clients.api_client import api_client
+
+from frontend.clients.api_client import api_client
+from frontend.event_listeners.draw_event_listener import handle_draw
+
 
 def load_existing_areas_on_map(map_instance):
     """Load all saved areas and display them on the map."""
     try:
-        
+
         areas = api_client.get_all_areas()
-        
-        for area_geometry in areas:
-            
+
+        for area in areas:
+            area_geometry = area['geometry']
+
             coords = area_geometry['coordinates'][0]  # Get coordinate ring
-            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in coords[:-1]]  # Convert [lng,lat] to (lat,lng), skip duplicate
-            map_instance.generic_layer(name='polygon', args=[nicegui_coords])
+            nicegui_coords = [(lat_lng[1], lat_lng[0]) for lat_lng in
+                              coords[:-1]]  # Convert [lng,lat] to (lat,lng), skip duplicate
+            layer = map_instance.generic_layer(
+                name='polygon',
+                args=[
+                    nicegui_coords,
+                    {'area_id': area['id']},
+                    {'area_name': area['name']}
+                ]
+            )
 
         ui.notify(f'Processed {len(areas)} areas from database', type='positive')
-        
+
     except Exception as e:
         print(f"Load areas error: {e}")
         ui.notify(f'Failed to load areas: {str(e)}', type='negative')
+
 
 def create_map():
     """Create and configure the main map component."""
@@ -42,7 +54,7 @@ def create_map():
     m = ui.leaflet(center=(51.505, -0.09), zoom=12, draw_control=draw_control)
     # full width; height fills the viewport minus the header (approx 64px)
     m.classes('w-full h-[calc(100vh-64px)]')
-    
+
     # Register event handlers
     m.on('draw:created', handle_draw)
     m.on('draw:edited', lambda: ui.notify('Edit completed'))

@@ -1,5 +1,5 @@
 from nicegui import events
-from components.area_popup_window.popup_window import AreaNameDialog
+from frontend.components.area_popup_window.popup_window import AreaNameDialog
 
 
 def handle_draw(e: events.GenericEventArguments):

@@ -1,6 +1,6 @@
 from nicegui import ui
-from components.map_component import create_map, load_existing_areas_on_map
-from components.sidebar import create_sidebar
+from frontend.components.map_component import create_map, load_existing_areas_on_map
+from frontend.components.sidebar import create_sidebar
 
 
 @ui.page('/')

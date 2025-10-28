@@ -1,6 +1,6 @@
 from nicegui import ui
-from components.sidebar_tools.tool_1 import create_tool_1
-from components.sidebar_tools.tool_2 import create_tool_2
+from frontend.components.sidebar_tools.tool_1 import create_tool_1
+from frontend.components.sidebar_tools.tool_2 import create_tool_2
 
 
 def create_sidebar():

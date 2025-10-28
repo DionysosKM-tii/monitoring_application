@@ -1,5 +1,5 @@
 from nicegui import ui
-from clients.api_client import api_client
+from frontend.clients.api_client import api_client
 
 class AreaNameDialog:
     """Dialog for collecting area name from user."""
