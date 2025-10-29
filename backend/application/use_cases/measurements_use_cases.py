@@ -1,0 +1,31 @@
+from dataclasses import dataclass
+from typing import Optional
+
+from backend.application.data_services.measurements_data_service import MeasurementsDataService
+from backend.application.dtos.measurement_dto import MeasurementDTO
+from backend.domain.entities.measurement import Measurement
+
+
+@dataclass
+class MeasurementsUseCases:
+    measurements_data_service: MeasurementsDataService
+
+    def import_measurements_from_csv(self, measurements_dtos: list[MeasurementDTO]) -> None:
+        for measurement_dto in measurements_dtos:
+            # `measurement` is not used here, but we should pass through the domain, because this is where we check if the metric type is supported
+            # Alternatively, we could expose a method from the domain entity that performs this check
+            measurement = Measurement.add_new_measurement(
+                measurement_dto.area_id,
+                measurement_dto.timestamp,
+                measurement_dto.metric_type,
+                measurement_dto.metric_value
+            )
+            # Normally here we should transform the entity object back to a DTO,
+            # but since here we are not really changing the data, we can just use the dto
+            self.measurements_data_service.save_measurement(measurement_dto)
+
+    def get_measurements_for_area_id(self, area_id: int, metric_type: Optional[str]) -> list[MeasurementDTO]:
+        if Measurement.is_metric_type_supported(metric_type):
+            return self.measurements_data_service.get_measurements_for_area_id_and_metric_type(area_id, metric_type)
+        else:
+            return self.measurements_data_service.get_measurements_for_area_id(area_id)

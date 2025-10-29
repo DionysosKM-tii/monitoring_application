@@ -216,6 +216,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-http/*.png
+http/test*
 photos/*png
 *.png
