@@ -62,16 +62,13 @@ def create_map():
         },
     }
 
-    # Create the leaflet map
-    m = ui.leaflet(center=(51.505, -0.09), zoom=12, draw_control=draw_control)
-    # full width; height fills the viewport minus the header (approx 64px)
+    m = ui.leaflet(center=(31.5017, 34.4668), zoom=10, draw_control=draw_control)
     m.classes('w-full h-screen')
 
     # Register event handlers
     m.on('draw:created', handle_draw)
     m.on('draw:edited', lambda: ui.notify('Edit completed'))
     m.on('draw:deleted', lambda: ui.notify('Delete completed'))
-
     m.on('map-click', on_map_click)
 
     return m

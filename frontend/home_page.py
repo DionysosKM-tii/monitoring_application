@@ -10,6 +10,7 @@ async def home_page():
     # Make the map 100% of the screen
     ui.query('body').style('margin: 0; padding: 0; overflow: hidden;')
     ui.query('.nicegui-content').style('padding: 0; height: 100vh; width: 100vw;')
+    ui.add_head_html('<style>.leaflet-control-attribution { display: none !important; }</style>')
 
     try:
         m = create_map()
